@@ -158,40 +158,19 @@ javadoc {
 
 // configure the maven publication
 publishing {
-	publications {
-		maven(MavenPublication) {
-			from components.java
-			pom {
-				name = "LibGui"
-				description = "Minecraft GUI Library"
-				url = "https://github.com/CottonMC/LibGui"
-				licenses {
-					license {
-						name = "MIT"
-						url = "https://github.com/CottonMC/LibGui/blob/HEAD/LICENSE"
-					}
-				}
-				developers {
-					developer {
-						name = "CottonMC"
-						url = "https://github.com/CottonMC"
-					}
-				}
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/seeruk/LibGui")
+			credentials {
+				username = System.getenv("GITHUB_ACTOR")
+				password = System.getenv("GITHUB_TOKEN")
 			}
 		}
 	}
-
-	// select the repositories you want to publish to
-	repositories {
-		def env = System.getenv()
-		if (env.MAVEN_URL) {
-			maven {
-				url = env.MAVEN_URL
-				credentials {
-					username = env.MAVEN_USERNAME
-					password = env.MAVEN_PASSWORD
-				}
-			}
+	publications {
+		gpr(MavenPublication) {
+			from(components.java)
 		}
 	}
 }
